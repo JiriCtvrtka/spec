@@ -27,12 +27,12 @@ type Response struct {
 	VendorExtensible
 }
 
-// NewResponse creates a new response instance
+// NewResponse creates a new response instance.
 func NewResponse() *Response {
 	return new(Response)
 }
 
-// ResponseRef creates a response as a json reference
+// ResponseRef creates a response as a json reference.
 func ResponseRef(url string) *Response {
 	resp := NewResponse()
 	resp.Ref = MustCreateRef(url)

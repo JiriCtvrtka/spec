@@ -134,21 +134,21 @@ func (r *schemaLoader) resolveRef(ref *Ref, target any, basePath string) error {
 	// Resolve against the root if it isn't nil, and if ref is pointing at the root, or has a fragment only which means
 	// it is pointing somewhere in the root.
 	root := r.root
-	if (ref.IsRoot() || ref.HasFragmentOnly) && root == nil && basePath != "" {
-		if baseRef, erb := NewRef(basePath); erb == nil {
-			root, _, _, _ = r.load(baseRef.GetURL())
-		}
-	}
+       if (ref.IsRoot() || ref.HasFragmentOnly) && root == nil && basePath != "" {
+	       if baseRef, erb := NewRef(basePath); erb == nil {
+		       root, _, _ = r.load(baseRef.GetURL())
+	       }
+       }
 
-	if (ref.IsRoot() || ref.HasFragmentOnly) && root != nil {
-		data = root
-	} else {
-		baseRef := normalizeRef(ref, basePath)
-		data, _, _, err = r.load(baseRef.GetURL())
-		if err != nil {
-			return err
-		}
-	}
+       if (ref.IsRoot() || ref.HasFragmentOnly) && root != nil {
+	       data = root
+       } else {
+	       baseRef := normalizeRef(ref, basePath)
+	       data, _, err = r.load(baseRef.GetURL())
+	       if err != nil {
+		       return err
+	       }
+       }
 
 	res = data
 	if ref.String() != "" {
@@ -160,7 +160,7 @@ func (r *schemaLoader) resolveRef(ref *Ref, target any, basePath string) error {
 	return jsonutils.FromDynamicJSON(res, target)
 }
 
-func (r *schemaLoader) load(refURL *url.URL) (any, url.URL, bool, error) {
+func (r *schemaLoader) load(refURL *url.URL) (any, bool, error) {
 	debugLog("loading schema from url: %s", refURL)
 	toFetch := *refURL
 	toFetch.Fragment = ""
@@ -170,23 +170,24 @@ func (r *schemaLoader) load(refURL *url.URL) (any, url.URL, bool, error) {
 	normalized := normalizeBase(pth)
 	debugLog("loading doc from: %s", normalized)
 
-	data, fromCache := r.cache.Get(normalized)
-	if fromCache {
-		return data, toFetch, fromCache, nil
-	}
 
-	b, err := r.context.loadDoc(normalized)
-	if err != nil {
-		return nil, url.URL{}, false, err
-	}
+       data, fromCache := r.cache.Get(normalized)
+       if fromCache {
+	       return data, fromCache, nil
+       }
 
-	var doc any
-	if err := json.Unmarshal(b, &doc); err != nil {
-		return nil, url.URL{}, false, err
-	}
-	r.cache.Set(normalized, doc)
+       b, err := r.context.loadDoc(normalized)
+       if err != nil {
+	       return nil, false, err
+       }
 
-	return doc, toFetch, fromCache, nil
+       var doc any
+       if err := json.Unmarshal(b, &doc); err != nil {
+	       return nil, false, err
+       }
+       r.cache.Set(normalized, doc)
+
+       return doc, fromCache, nil
 }
 
 // isCircular detects cycles in sequences of $ref.

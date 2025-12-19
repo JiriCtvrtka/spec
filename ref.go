@@ -24,18 +24,18 @@ func (r Refable) MarshalJSON() ([]byte, error) {
 	return r.Ref.MarshalJSON()
 }
 
-// UnmarshalJSON unmarshals the ref from json
+// UnmarshalJSON unmarshals the ref from json.
 func (r *Refable) UnmarshalJSON(d []byte) error {
 	return json.Unmarshal(d, &r.Ref)
 }
 
-// Ref represents a json reference that is potentially resolved
+// Ref represents a json reference that is potentially resolved.
 type Ref struct {
 	jsonreference.Ref
 }
 
-// NewRef creates a new instance of a ref object
-// returns an error when the reference uri is an invalid uri
+// NewRef creates a new instance of a ref object.
+// Returns an error when the reference uri is an invalid uri.
 func NewRef(refURI string) (Ref, error) {
 	ref, err := jsonreference.New(refURI)
 	if err != nil {

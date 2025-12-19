@@ -38,10 +38,10 @@ type OperationProps struct {
 	Responses    *Responses             `json:"responses,omitempty"`
 }
 
-// MarshalJSON takes care of serializing operation properties to JSON
+// MarshalJSON takes care of serializing operation properties to JSON.
 //
 // We use a custom marhaller here to handle a special cases related to
-// the Security field. We need to preserve zero length slice
+// the Security field. We need to preserve zero length slice.
 // while omitting the field when the value is nil/unset.
 func (op OperationProps) MarshalJSON() ([]byte, error) {
 	type Alias OperationProps

@@ -344,6 +344,7 @@ func doTestOperationGobEncoding(t *testing.T, fixture string) {
 }
 
 func doTestAnyGobEncoding(t *testing.T, src, dst any) {
+	t.Helper()
 	expectedJSON, _ := json.MarshalIndent(src, "", " ")
 
 	var b bytes.Buffer

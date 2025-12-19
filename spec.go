@@ -13,9 +13,9 @@ import (
 //go:generate perl -pi -e s,Json,JSON,g bindata.go
 
 const (
-	// SwaggerSchemaURL the url for the swagger 2.0 schema to validate specs
+	// SwaggerSchemaURL the url for the swagger 2.0 schema to validate specs.
 	SwaggerSchemaURL = "http://swagger.io/v2/schema.json#"
-	// JSONSchemaURL the url for the json schema
+	// JSONSchemaURL the url for the json schema.
 	JSONSchemaURL = "http://json-schema.org/draft-04/schema#"
 )
 

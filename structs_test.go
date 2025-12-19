@@ -13,6 +13,7 @@ import (
 )
 
 func assertSerializeJSON(t testing.TB, actual any, expected string) bool {
+	t.Helper()
 	ser, err := json.Marshal(actual)
 	if err != nil {
 		return assert.Failf(t, "unable to marshal to json", "got: %v: %#v", err, actual)
@@ -22,6 +23,7 @@ func assertSerializeJSON(t testing.TB, actual any, expected string) bool {
 }
 
 func assertSerializeYAML(t testing.TB, actual any, expected string) bool {
+	t.Helper()
 	ser, err := yaml.Marshal(actual)
 	if err != nil {
 		return assert.Failf(t, "unable to marshal to yaml", "got: %v: %#v", err, actual)
@@ -46,6 +48,7 @@ func isPointed(expected any) (pointed bool) {
 }
 
 func assertParsesJSON(t testing.TB, actual string, expected any) bool {
+	t.Helper()
 	parsed := reflect.New(derefTypeOf(expected))
 	err := json.Unmarshal([]byte(actual), parsed.Interface())
 	if err != nil {
@@ -59,6 +62,7 @@ func assertParsesJSON(t testing.TB, actual string, expected any) bool {
 }
 
 func assertParsesYAML(t testing.TB, actual string, expected any) bool {
+	t.Helper()
 	parsed := reflect.New(derefTypeOf(expected))
 	err := yaml.Unmarshal([]byte(actual), parsed.Interface())
 	if err != nil {

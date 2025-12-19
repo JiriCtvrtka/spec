@@ -27,7 +27,7 @@ type Tag struct {
 	TagProps
 }
 
-// NewTag creates a new tag
+// NewTag creates a new tag.
 func NewTag(name, description string, externalDocs *ExternalDocumentation) Tag {
 	return Tag{TagProps: TagProps{Description: description, Name: name, ExternalDocs: externalDocs}}
 }
