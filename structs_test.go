@@ -1,16 +1,5 @@
-// Copyright 2015 go-swagger maintainers
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-FileCopyrightText: Copyright 2015-2025 go-swagger maintainers
+// SPDX-License-Identifier: Apache-2.0
 
 package spec
 
@@ -19,27 +8,28 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"gopkg.in/yaml.v3"
+	"github.com/go-openapi/testify/v2/assert"
+	yaml "go.yaml.in/yaml/v3"
 )
 
-func assertSerializeJSON(t testing.TB, actual interface{}, expected string) bool {
+func assertSerializeJSON(t testing.TB, actual any, expected string) bool {
 	ser, err := json.Marshal(actual)
 	if err != nil {
-		return assert.Fail(t, "unable to marshal to json (%s): %#v", err, actual)
+		return assert.Failf(t, "unable to marshal to json", "got: %v: %#v", err, actual)
 	}
+
 	return assert.Equal(t, expected, string(ser))
 }
 
-func assertSerializeYAML(t testing.TB, actual interface{}, expected string) bool {
+func assertSerializeYAML(t testing.TB, actual any, expected string) bool {
 	ser, err := yaml.Marshal(actual)
 	if err != nil {
-		return assert.Fail(t, "unable to marshal to yaml (%s): %#v", err, actual)
+		return assert.Failf(t, "unable to marshal to yaml", "got: %v: %#v", err, actual)
 	}
 	return assert.Equal(t, expected, string(ser))
 }
 
-func derefTypeOf(expected interface{}) (tpe reflect.Type) {
+func derefTypeOf(expected any) (tpe reflect.Type) {
 	tpe = reflect.TypeOf(expected)
 	if tpe.Kind() == reflect.Ptr {
 		tpe = tpe.Elem()
@@ -47,7 +37,7 @@ func derefTypeOf(expected interface{}) (tpe reflect.Type) {
 	return
 }
 
-func isPointed(expected interface{}) (pointed bool) {
+func isPointed(expected any) (pointed bool) {
 	tpe := reflect.TypeOf(expected)
 	if tpe.Kind() == reflect.Ptr {
 		pointed = true
@@ -55,11 +45,11 @@ func isPointed(expected interface{}) (pointed bool) {
 	return
 }
 
-func assertParsesJSON(t testing.TB, actual string, expected interface{}) bool {
+func assertParsesJSON(t testing.TB, actual string, expected any) bool {
 	parsed := reflect.New(derefTypeOf(expected))
 	err := json.Unmarshal([]byte(actual), parsed.Interface())
 	if err != nil {
-		return assert.Fail(t, "unable to unmarshal from json (%s): %s", err, actual)
+		return assert.Failf(t, "unable to unmarshal from json", "got: %v: %s", err, actual)
 	}
 	act := parsed.Interface()
 	if !isPointed(expected) {
@@ -68,17 +58,17 @@ func assertParsesJSON(t testing.TB, actual string, expected interface{}) bool {
 	return assert.Equal(t, expected, act)
 }
 
-func assertParsesYAML(t testing.TB, actual string, expected interface{}) bool {
+func assertParsesYAML(t testing.TB, actual string, expected any) bool {
 	parsed := reflect.New(derefTypeOf(expected))
 	err := yaml.Unmarshal([]byte(actual), parsed.Interface())
 	if err != nil {
-		return assert.Fail(t, "unable to unmarshal from yaml (%s): %s", err, actual)
+		return assert.Failf(t, "unable to unmarshal from yaml", "got: %v: %s", err, actual)
 	}
 	act := parsed.Interface()
 	if !isPointed(expected) {
 		act = reflect.Indirect(parsed).Interface()
 	}
-	return assert.EqualValues(t, expected, act)
+	return assert.Equal(t, expected, act)
 }
 
 func TestSerialization_SerializeJSON(t *testing.T) {
