@@ -28,7 +28,7 @@ func MustLoadJSONSchemaDraft04() *Schema {
 	return d
 }
 
-// JSONSchemaDraft04 loads the json schema document for json schema draft04
+// JSONSchemaDraft04 loads the json schema document for json schema draft04.
 func JSONSchemaDraft04() (*Schema, error) {
 	b, err := jsonschemaDraft04JSONBytes()
 	if err != nil {
@@ -53,7 +53,6 @@ func MustLoadSwagger20Schema() *Schema {
 
 // Swagger20Schema loads the swagger 2.0 schema from the embedded assets
 func Swagger20Schema() (*Schema, error) {
-
 	b, err := v2SchemaJSONBytes()
 	if err != nil {
 		return nil, err

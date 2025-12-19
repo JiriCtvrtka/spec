@@ -36,10 +36,11 @@ var testInfo = Info{
 			"the swagger-2.0 specification",
 		TermsOfService: "http://helloreverb.com/terms/",
 		Contact:        &ContactInfo{ContactInfoProps: ContactInfoProps{Name: "wordnik api team", URL: "http://developer.wordnik.com"}},
-		License: &License{LicenseProps: LicenseProps{
-			Name: "Creative Commons 4.0 International",
-			URL:  "http://creativecommons.org/licenses/by/4.0/",
-		},
+		License: &License{
+			LicenseProps: LicenseProps{
+				Name: "Creative Commons 4.0 International",
+				URL:  "http://creativecommons.org/licenses/by/4.0/",
+			},
 		},
 	},
 	VendorExtensible: VendorExtensible{Extensions: map[string]any{"x-framework": "go-swagger"}},

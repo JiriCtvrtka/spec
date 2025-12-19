@@ -18,7 +18,7 @@ func TestPropertySerialization(t *testing.T) {
 		}},
 	}}
 
-	var propSerData = []struct {
+	propSerData := []struct {
 		Schema *Schema
 		JSON   string
 	}{
@@ -43,5 +43,4 @@ func TestPropertySerialization(t *testing.T) {
 		assertSerializeJSON(t, v.Schema, v.JSON)
 		assertParsesJSON(t, v.JSON, v.Schema)
 	}
-
 }

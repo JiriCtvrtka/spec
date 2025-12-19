@@ -151,7 +151,6 @@ func TestExpand_EmptySpec(t *testing.T) {
 }
 
 func TestExpand_Spec(t *testing.T) {
-
 	// expansion of a rich spec
 	specPath := filepath.Join("fixtures", "expansion", "all-the-things.json")
 	specDoc, err := jsonDoc(specPath)

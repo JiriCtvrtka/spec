@@ -12,23 +12,23 @@ import (
 	yaml "go.yaml.in/yaml/v3"
 )
 
-func assertSerializeJSON(t testing.TB, actual any, expected string) bool {
-	t.Helper()
-	ser, err := json.Marshal(actual)
-	if err != nil {
-		return assert.Failf(t, "unable to marshal to json", "got: %v: %#v", err, actual)
-	}
+func assertSerializeJSON(tb testing.TB, actual any, expected string) bool {
+       tb.Helper()
+       ser, err := json.Marshal(actual)
+       if err != nil {
+	       return assert.Failf(tb, "unable to marshal to json", "got: %v: %#v", err, actual)
+       }
 
-	return assert.Equal(t, expected, string(ser))
+       return assert.Equal(tb, expected, string(ser))
 }
 
-func assertSerializeYAML(t testing.TB, actual any, expected string) bool {
-	t.Helper()
-	ser, err := yaml.Marshal(actual)
-	if err != nil {
-		return assert.Failf(t, "unable to marshal to yaml", "got: %v: %#v", err, actual)
-	}
-	return assert.Equal(t, expected, string(ser))
+func assertSerializeYAML(tb testing.TB, actual any, expected string) bool {
+       tb.Helper()
+       ser, err := yaml.Marshal(actual)
+       if err != nil {
+	       return assert.Failf(tb, "unable to marshal to yaml", "got: %v: %#v", err, actual)
+       }
+       return assert.Equal(tb, expected, string(ser))
 }
 
 func derefTypeOf(expected any) (tpe reflect.Type) {
@@ -47,32 +47,32 @@ func isPointed(expected any) (pointed bool) {
 	return
 }
 
-func assertParsesJSON(t testing.TB, actual string, expected any) bool {
-	t.Helper()
-	parsed := reflect.New(derefTypeOf(expected))
-	err := json.Unmarshal([]byte(actual), parsed.Interface())
-	if err != nil {
-		return assert.Failf(t, "unable to unmarshal from json", "got: %v: %s", err, actual)
-	}
-	act := parsed.Interface()
-	if !isPointed(expected) {
-		act = reflect.Indirect(parsed).Interface()
-	}
-	return assert.Equal(t, expected, act)
+func assertParsesJSON(tb testing.TB, actual string, expected any) bool {
+       tb.Helper()
+       parsed := reflect.New(derefTypeOf(expected))
+       err := json.Unmarshal([]byte(actual), parsed.Interface())
+       if err != nil {
+	       return assert.Failf(tb, "unable to unmarshal from json", "got: %v: %s", err, actual)
+       }
+       act := parsed.Interface()
+       if !isPointed(expected) {
+	       act = reflect.Indirect(parsed).Interface()
+       }
+       return assert.Equal(tb, expected, act)
 }
 
-func assertParsesYAML(t testing.TB, actual string, expected any) bool {
-	t.Helper()
-	parsed := reflect.New(derefTypeOf(expected))
-	err := yaml.Unmarshal([]byte(actual), parsed.Interface())
-	if err != nil {
-		return assert.Failf(t, "unable to unmarshal from yaml", "got: %v: %s", err, actual)
-	}
-	act := parsed.Interface()
-	if !isPointed(expected) {
-		act = reflect.Indirect(parsed).Interface()
-	}
-	return assert.Equal(t, expected, act)
+func assertParsesYAML(tb testing.TB, actual string, expected any) bool {
+       tb.Helper()
+       parsed := reflect.New(derefTypeOf(expected))
+       err := yaml.Unmarshal([]byte(actual), parsed.Interface())
+       if err != nil {
+	       return assert.Failf(tb, "unable to unmarshal from yaml", "got: %v: %s", err, actual)
+       }
+       act := parsed.Interface()
+       if !isPointed(expected) {
+	       act = reflect.Indirect(parsed).Interface()
+       }
+       return assert.Equal(tb, expected, act)
 }
 
 func TestSerialization_SerializeJSON(t *testing.T) {
@@ -81,13 +81,15 @@ func TestSerialization_SerializeJSON(t *testing.T) {
 	assertSerializeJSON(t, StringOrArray(nil), "null")
 	assertSerializeJSON(t, SchemaOrArray{
 		Schemas: []Schema{
-			{SchemaProps: SchemaProps{Type: []string{"string"}}}},
+			{SchemaProps: SchemaProps{Type: []string{"string"}}},
+		},
 	}, "[{\"type\":\"string\"}]")
 	assertSerializeJSON(t, SchemaOrArray{
 		Schemas: []Schema{
 			{SchemaProps: SchemaProps{Type: []string{"string"}}},
 			{SchemaProps: SchemaProps{Type: []string{"string"}}},
-		}}, "[{\"type\":\"string\"},{\"type\":\"string\"}]")
+		},
+	}, "[{\"type\":\"string\"},{\"type\":\"string\"}]")
 	assertSerializeJSON(t, SchemaOrArray{}, "null")
 }
 
@@ -100,8 +102,10 @@ func TestSerialization_DeserializeJSON(t *testing.T) {
 	assertParsesJSON(t, "null", StringOrArray(nil))
 
 	// Schema
-	assertParsesJSON(t, "{\"type\":\"string\"}", SchemaOrArray{Schema: &Schema{
-		SchemaProps: SchemaProps{Type: []string{"string"}}},
+	assertParsesJSON(t, "{\"type\":\"string\"}", SchemaOrArray{
+		Schema: &Schema{
+			SchemaProps: SchemaProps{Type: []string{"string"}},
+		},
 	})
 	assertParsesJSON(t, "[{\"type\":\"string\"},{\"type\":\"string\"}]", &SchemaOrArray{
 		Schemas: []Schema{

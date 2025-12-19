@@ -76,7 +76,7 @@ type schemaLoader struct {
 //
 // If the schema the ref is referring to holds nested refs, Resolve doesn't resolve them.
 //
-// If basePath is an empty string, ref is resolved against the root schema stored in the schemaLoader struct
+// If basePath is an empty string, ref is resolved against the root schema stored in the schemaLoader struct.
 func (r *schemaLoader) Resolve(ref *Ref, target any, basePath string) error {
 	return r.resolveRef(ref, target, basePath)
 }
@@ -134,21 +134,21 @@ func (r *schemaLoader) resolveRef(ref *Ref, target any, basePath string) error {
 	// Resolve against the root if it isn't nil, and if ref is pointing at the root, or has a fragment only which means
 	// it is pointing somewhere in the root.
 	root := r.root
-       if (ref.IsRoot() || ref.HasFragmentOnly) && root == nil && basePath != "" {
-	       if baseRef, erb := NewRef(basePath); erb == nil {
-		       root, _, _ = r.load(baseRef.GetURL())
-	       }
-       }
+	if (ref.IsRoot() || ref.HasFragmentOnly) && root == nil && basePath != "" {
+		if baseRef, erb := NewRef(basePath); erb == nil {
+			root, _, _ = r.load(baseRef.GetURL())
+		}
+	}
 
-       if (ref.IsRoot() || ref.HasFragmentOnly) && root != nil {
-	       data = root
-       } else {
-	       baseRef := normalizeRef(ref, basePath)
-	       data, _, err = r.load(baseRef.GetURL())
-	       if err != nil {
-		       return err
-	       }
-       }
+	if (ref.IsRoot() || ref.HasFragmentOnly) && root != nil {
+		data = root
+	} else {
+		baseRef := normalizeRef(ref, basePath)
+		data, _, err = r.load(baseRef.GetURL())
+		if err != nil {
+			return err
+		}
+	}
 
 	res = data
 	if ref.String() != "" {
@@ -170,24 +170,23 @@ func (r *schemaLoader) load(refURL *url.URL) (any, bool, error) {
 	normalized := normalizeBase(pth)
 	debugLog("loading doc from: %s", normalized)
 
+	data, fromCache := r.cache.Get(normalized)
+	if fromCache {
+		return data, fromCache, nil
+	}
 
-       data, fromCache := r.cache.Get(normalized)
-       if fromCache {
-	       return data, fromCache, nil
-       }
+	b, err := r.context.loadDoc(normalized)
+	if err != nil {
+		return nil, false, err
+	}
 
-       b, err := r.context.loadDoc(normalized)
-       if err != nil {
-	       return nil, false, err
-       }
+	var doc any
+	if err := json.Unmarshal(b, &doc); err != nil {
+		return nil, false, err
+	}
+	r.cache.Set(normalized, doc)
 
-       var doc any
-       if err := json.Unmarshal(b, &doc); err != nil {
-	       return nil, false, err
-       }
-       r.cache.Set(normalized, doc)
-
-       return doc, fromCache, nil
+	return doc, fromCache, nil
 }
 
 // isCircular detects cycles in sequences of $ref.
@@ -294,8 +293,8 @@ func defaultSchemaLoader(
 	root any,
 	expandOptions *ExpandOptions,
 	cache ResolutionCache,
-	context *resolverContext) *schemaLoader {
-
+	context *resolverContext,
+) *schemaLoader {
 	if expandOptions == nil {
 		expandOptions = &ExpandOptions{}
 	}

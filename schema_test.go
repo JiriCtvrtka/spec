@@ -139,7 +139,6 @@ var schemaJSON = `{
 `
 
 func TestSchema(t *testing.T) {
-
 	expected := map[string]any{}
 	_ = json.Unmarshal([]byte(schemaJSON), &expected)
 	b, err := json.Marshal(schema)

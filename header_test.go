@@ -17,6 +17,7 @@ const epsilon = 1e-9
 func float64Ptr(f float64) *float64 {
 	return &f
 }
+
 func int64Ptr(f int64) *int64 {
 	return &f
 }

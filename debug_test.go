@@ -11,9 +11,7 @@ import (
 	"github.com/go-openapi/testify/v2/assert"
 )
 
-var (
-	logMutex = &sync.Mutex{}
-)
+var logMutex = &sync.Mutex{}
 
 func TestDebug(t *testing.T) {
 	// usetesting linter disabled until https://github.com/golang/go/issues/71544 is fixed for windows

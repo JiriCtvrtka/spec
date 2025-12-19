@@ -142,7 +142,6 @@ func TestParameterSerialization(t *testing.T) {
 	assertSerializeJSON(t,
 		BodyParam("", ArrayProperty(RefProperty("Cat"))),
 		`{"in":"body","schema":{"type":"array","items":{"$ref":"Cat"}}}`)
-
 }
 
 func TestParameterGobEncoding(t *testing.T) {

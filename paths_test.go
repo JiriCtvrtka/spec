@@ -28,5 +28,4 @@ func TestIntegrationPaths(t *testing.T) {
 	assert.Equal(t, actual, paths)
 
 	assertParsesJSON(t, pathsJSON, paths)
-
 }

@@ -65,7 +65,6 @@ func TestSerialization_AuthSerialization(t *testing.T) {
 }
 
 func TestSerialization_AuthDeserialization(t *testing.T) {
-
 	assertParsesJSON(t, `{"type":"basic"}`, BasicAuth())
 
 	assertParsesJSON(
@@ -120,5 +119,4 @@ func TestSerialization_AuthDeserialization(t *testing.T) {
 		`{"authorizationUrl":"http://foo.com/authorization","flow":"accessCode","scopes":{"email":"read your email"},`+
 			`"tokenUrl":"http://foo.com/token","type":"oauth2"}`,
 		auth4)
-
 }

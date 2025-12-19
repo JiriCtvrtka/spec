@@ -18,9 +18,10 @@ func TestIntegrationLicense(t *testing.T) {
 	"x-license": "custom term"
 }`
 
-	var testLicense = License{
+	testLicense := License{
 		LicenseProps:     LicenseProps{Name: "the name", URL: "the url"},
-		VendorExtensible: VendorExtensible{Extensions: map[string]any{"x-license": "custom term"}}}
+		VendorExtensible: VendorExtensible{Extensions: map[string]any{"x-license": "custom term"}},
+	}
 
 	// const licenseYAML = "name: the name\nurl: the url\n"
 

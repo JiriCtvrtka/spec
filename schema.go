@@ -78,8 +78,10 @@ func DateTimeProperty() *Schema {
 
 // MapProperty creates a map property
 func MapProperty(property *Schema) *Schema {
-	return &Schema{SchemaProps: SchemaProps{Type: []string{"object"},
-		AdditionalProperties: &SchemaOrBool{Allows: true, Schema: property}}}
+	return &Schema{SchemaProps: SchemaProps{
+		Type:                 []string{"object"},
+		AdditionalProperties: &SchemaOrBool{Allows: true, Schema: property},
+	}}
 }
 
 // RefProperty creates a ref property
@@ -556,31 +558,31 @@ func (s Schema) Validations() SchemaValidations {
 // MarshalJSON marshal this to JSON
 func (s Schema) MarshalJSON() ([]byte, error) {
 	b1, err := json.Marshal(s.SchemaProps)
-       if err != nil {
-	       return nil, fmt.Errorf("schema props: %w: %w", err, ErrSpec)
-       }
+	if err != nil {
+		return nil, fmt.Errorf("schema props: %w: %w", err, ErrSpec)
+	}
 	b2, err := json.Marshal(s.VendorExtensible)
-       if err != nil {
-	       return nil, fmt.Errorf("vendor props: %w: %w", err, ErrSpec)
-       }
+	if err != nil {
+		return nil, fmt.Errorf("vendor props: %w: %w", err, ErrSpec)
+	}
 	b3, err := s.Ref.MarshalJSON()
-       if err != nil {
-	       return nil, fmt.Errorf("ref prop: %w: %w", err, ErrSpec)
-       }
+	if err != nil {
+		return nil, fmt.Errorf("ref prop: %w: %w", err, ErrSpec)
+	}
 	b4, err := s.Schema.MarshalJSON()
-       if err != nil {
-	       return nil, fmt.Errorf("schema prop: %w: %w", err, ErrSpec)
-       }
+	if err != nil {
+		return nil, fmt.Errorf("schema prop: %w: %w", err, ErrSpec)
+	}
 	b5, err := json.Marshal(s.SwaggerSchemaProps)
-       if err != nil {
-	       return nil, fmt.Errorf("common validations: %w: %w", err, ErrSpec)
-       }
+	if err != nil {
+		return nil, fmt.Errorf("common validations: %w: %w", err, ErrSpec)
+	}
 	var b6 []byte
 	if s.ExtraProps != nil {
 		jj, err := json.Marshal(s.ExtraProps)
-	       if err != nil {
-		       return nil, fmt.Errorf("extra props: %w: %w", err, ErrSpec)
-	       }
+		if err != nil {
+			return nil, fmt.Errorf("extra props: %w: %w", err, ErrSpec)
+		}
 		b6 = jj
 	}
 	return jsonutils.ConcatJSON(b1, b2, b3, b4, b5, b6), nil

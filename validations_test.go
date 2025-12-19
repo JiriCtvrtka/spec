@@ -36,7 +36,6 @@ func mkVal() SchemaValidations {
 }
 
 func TestValidations(t *testing.T) {
-
 	var cv CommonValidations
 	val := mkVal()
 	cv.SetValidations(val)

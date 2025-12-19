@@ -142,10 +142,10 @@ func assertRefWithFunc(t *testing.T, name, jazon, exclude string, asserter func(
 	}
 }
 
-func asJSON(t testing.TB, sp any) string {
-	t.Helper()
+func asJSON(tb testing.TB, sp any) string {
+	tb.Helper()
 	bbb, err := json.MarshalIndent(sp, "", " ")
-	require.NoError(t, err)
+	require.NoError(tb, err)
 
 	return string(bbb)
 }
