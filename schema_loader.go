@@ -160,7 +160,7 @@ func (r *schemaLoader) resolveRef(ref *Ref, target any, basePath string) error {
 	return jsonutils.FromDynamicJSON(res, target)
 }
 
-func (r *schemaLoader) load(refURL *url.URL) (any, bool, error) {
+func (r *schemaLoader) load(refURL *url.URL) (any, bool, error) { //nolint:unparam
 	debugLog("loading schema from url: %s", refURL)
 	toFetch := *refURL
 	toFetch.Fragment = ""

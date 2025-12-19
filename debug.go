@@ -16,8 +16,8 @@ import (
 // It enables a more verbose logging of this package.
 var Debug = os.Getenv("SWAGGER_DEBUG") != ""
 
-// specLogger is a debug logger for this package
-var specLogger *log.Logger
+// specLogger is a debug logger for this package.
+var specLogger *log.Logger //nolint:gochecknoglobals
 
 func init() {
 	debugOptions()

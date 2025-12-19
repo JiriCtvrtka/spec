@@ -28,7 +28,7 @@ const infoJSON = `{
 	"x-framework": "go-swagger"
 }`
 
-var testInfo = Info{
+var testInfo = Info{ //nolint:gochecknoglobals
 	InfoProps: InfoProps{
 		Version: "1.0.9-abcd",
 		Title:   "Swagger Sample API",

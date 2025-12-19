@@ -12,7 +12,7 @@ import (
 	yaml "go.yaml.in/yaml/v3"
 )
 
-func assertSerializeJSON(tb testing.TB, actual any, expected string) bool {
+func assertSerializeJSON(tb testing.TB, actual any, expected string) bool { //nolint:unparam
 	tb.Helper()
 	ser, err := json.Marshal(actual)
 	if err != nil {
@@ -47,7 +47,7 @@ func isPointed(expected any) (pointed bool) {
 	return
 }
 
-func assertParsesJSON(tb testing.TB, actual string, expected any) bool {
+func assertParsesJSON(tb testing.TB, actual string, expected any) bool { //nolint:unparam
 	tb.Helper()
 	parsed := reflect.New(derefTypeOf(expected))
 	err := json.Unmarshal([]byte(actual), parsed.Interface())

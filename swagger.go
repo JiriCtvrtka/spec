@@ -226,8 +226,8 @@ func (s SchemaOrBool) JSONLookup(token string) (any, error) {
 }
 
 var (
-	jsTrue  = []byte("true")
-	jsFalse = []byte("false")
+	jsTrue  = []byte("true") //nolint:gochecknoglobals
+	jsFalse = []byte("false") //nolint:gochecknoglobals
 )
 
 // MarshalJSON convert this object to JSON
