@@ -12,32 +12,7 @@ import (
 	"github.com/go-openapi/testify/v2/require"
 )
 
-var testItems = Items{
-	Refable: Refable{Ref: MustCreateRef("Dog")},
-	CommonValidations: CommonValidations{
-		Maximum:          float64Ptr(100),
-		ExclusiveMaximum: true,
-		ExclusiveMinimum: true,
-		Minimum:          float64Ptr(5),
-		MaxLength:        int64Ptr(100),
-		MinLength:        int64Ptr(5),
-		Pattern:          "\\w{1,5}\\w+",
-		MaxItems:         int64Ptr(100),
-		MinItems:         int64Ptr(5),
-		UniqueItems:      true,
-		MultipleOf:       float64Ptr(5),
-		Enum:             []any{"hello", "world"},
-	},
-	SimpleSchema: SimpleSchema{
-		Type:   "string",
-		Format: "date",
-		Items: &Items{
-			Refable: Refable{Ref: MustCreateRef("Cat")},
-		},
-		CollectionFormat: "csv",
-		Default:          "8",
-	},
-}
+// testItems is now defined inside the test function to avoid global variable.
 
 const itemsJSON = `{
 	"items": {
@@ -63,6 +38,32 @@ const itemsJSON = `{
 }`
 
 func TestIntegrationItems(t *testing.T) {
+	testItems := Items{
+		Refable: Refable{Ref: MustCreateRef("Dog")},
+		CommonValidations: CommonValidations{
+			Maximum:          float64Ptr(100),
+			ExclusiveMaximum: true,
+			ExclusiveMinimum: true,
+			Minimum:          float64Ptr(5),
+			MaxLength:        int64Ptr(100),
+			MinLength:        int64Ptr(5),
+			Pattern:          "\\w{1,5}\\w+",
+			MaxItems:         int64Ptr(100),
+			MinItems:         int64Ptr(5),
+			UniqueItems:      true,
+			MultipleOf:       float64Ptr(5),
+			Enum:             []any{"hello", "world"},
+		},
+		SimpleSchema: SimpleSchema{
+			Type:   "string",
+			Format: "date",
+			Items: &Items{
+				Refable: Refable{Ref: MustCreateRef("Cat")},
+			},
+			CollectionFormat: "csv",
+			Default:          "8",
+		},
+	}
 	var actual Items
 	require.NoError(t, json.Unmarshal([]byte(itemsJSON), &actual))
 	assert.Equal(t, actual, testItems)
@@ -74,6 +75,32 @@ func TestTypeNameItems(t *testing.T) {
 	var nilItems Items
 	assert.Empty(t, nilItems.TypeName())
 
+	testItems := Items{
+		Refable: Refable{Ref: MustCreateRef("Dog")},
+		CommonValidations: CommonValidations{
+			Maximum:          float64Ptr(100),
+			ExclusiveMaximum: true,
+			ExclusiveMinimum: true,
+			Minimum:          float64Ptr(5),
+			MaxLength:        int64Ptr(100),
+			MinLength:        int64Ptr(5),
+			Pattern:          "\\w{1,5}\\w+",
+			MaxItems:         int64Ptr(100),
+			MinItems:         int64Ptr(5),
+			UniqueItems:      true,
+			MultipleOf:       float64Ptr(5),
+			Enum:             []any{"hello", "world"},
+		},
+		SimpleSchema: SimpleSchema{
+			Type:   "string",
+			Format: "date",
+			Items: &Items{
+				Refable: Refable{Ref: MustCreateRef("Cat")},
+			},
+			CollectionFormat: "csv",
+			Default:          "8",
+		},
+	}
 	assert.Equal(t, "date", testItems.TypeName())
 	assert.Empty(t, testItems.ItemsTypeName())
 
@@ -140,6 +167,32 @@ func TestItemsBuilder(t *testing.T) {
 }
 
 func TestJSONLookupItems(t *testing.T) {
+	testItems := Items{
+		Refable: Refable{Ref: MustCreateRef("Dog")},
+		CommonValidations: CommonValidations{
+			Maximum:          float64Ptr(100),
+			ExclusiveMaximum: true,
+			ExclusiveMinimum: true,
+			Minimum:          float64Ptr(5),
+			MaxLength:        int64Ptr(100),
+			MinLength:        int64Ptr(5),
+			Pattern:          "\\w{1,5}\\w+",
+			MaxItems:         int64Ptr(100),
+			MinItems:         int64Ptr(5),
+			UniqueItems:      true,
+			MultipleOf:       float64Ptr(5),
+			Enum:             []any{"hello", "world"},
+		},
+		SimpleSchema: SimpleSchema{
+			Type:   "string",
+			Format: "date",
+			Items: &Items{
+				Refable: Refable{Ref: MustCreateRef("Cat")},
+			},
+			CollectionFormat: "csv",
+			Default:          "8",
+		},
+	}
 	t.Run(`lookup should find "$ref"`, func(t *testing.T) {
 		res, err := testItems.JSONLookup("$ref")
 		require.NoError(t, err)

@@ -13,22 +13,22 @@ import (
 )
 
 func assertSerializeJSON(tb testing.TB, actual any, expected string) bool {
-       tb.Helper()
-       ser, err := json.Marshal(actual)
-       if err != nil {
-	       return assert.Failf(tb, "unable to marshal to json", "got: %v: %#v", err, actual)
-       }
+	tb.Helper()
+	ser, err := json.Marshal(actual)
+	if err != nil {
+		return assert.Failf(tb, "unable to marshal to json", "got: %v: %#v", err, actual)
+	}
 
-       return assert.Equal(tb, expected, string(ser))
+	return assert.Equal(tb, expected, string(ser))
 }
 
 func assertSerializeYAML(tb testing.TB, actual any, expected string) bool {
-       tb.Helper()
-       ser, err := yaml.Marshal(actual)
-       if err != nil {
-	       return assert.Failf(tb, "unable to marshal to yaml", "got: %v: %#v", err, actual)
-       }
-       return assert.Equal(tb, expected, string(ser))
+	tb.Helper()
+	ser, err := yaml.Marshal(actual)
+	if err != nil {
+		return assert.Failf(tb, "unable to marshal to yaml", "got: %v: %#v", err, actual)
+	}
+	return assert.Equal(tb, expected, string(ser))
 }
 
 func derefTypeOf(expected any) (tpe reflect.Type) {
@@ -48,31 +48,31 @@ func isPointed(expected any) (pointed bool) {
 }
 
 func assertParsesJSON(tb testing.TB, actual string, expected any) bool {
-       tb.Helper()
-       parsed := reflect.New(derefTypeOf(expected))
-       err := json.Unmarshal([]byte(actual), parsed.Interface())
-       if err != nil {
-	       return assert.Failf(tb, "unable to unmarshal from json", "got: %v: %s", err, actual)
-       }
-       act := parsed.Interface()
-       if !isPointed(expected) {
-	       act = reflect.Indirect(parsed).Interface()
-       }
-       return assert.Equal(tb, expected, act)
+	tb.Helper()
+	parsed := reflect.New(derefTypeOf(expected))
+	err := json.Unmarshal([]byte(actual), parsed.Interface())
+	if err != nil {
+		return assert.Failf(tb, "unable to unmarshal from json", "got: %v: %s", err, actual)
+	}
+	act := parsed.Interface()
+	if !isPointed(expected) {
+		act = reflect.Indirect(parsed).Interface()
+	}
+	return assert.Equal(tb, expected, act)
 }
 
 func assertParsesYAML(tb testing.TB, actual string, expected any) bool {
-       tb.Helper()
-       parsed := reflect.New(derefTypeOf(expected))
-       err := yaml.Unmarshal([]byte(actual), parsed.Interface())
-       if err != nil {
-	       return assert.Failf(tb, "unable to unmarshal from yaml", "got: %v: %s", err, actual)
-       }
-       act := parsed.Interface()
-       if !isPointed(expected) {
-	       act = reflect.Indirect(parsed).Interface()
-       }
-       return assert.Equal(tb, expected, act)
+	tb.Helper()
+	parsed := reflect.New(derefTypeOf(expected))
+	err := yaml.Unmarshal([]byte(actual), parsed.Interface())
+	if err != nil {
+		return assert.Failf(tb, "unable to unmarshal from yaml", "got: %v: %s", err, actual)
+	}
+	act := parsed.Interface()
+	if !isPointed(expected) {
+		act = reflect.Indirect(parsed).Interface()
+	}
+	return assert.Equal(tb, expected, act)
 }
 
 func TestSerialization_SerializeJSON(t *testing.T) {

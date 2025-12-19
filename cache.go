@@ -10,8 +10,8 @@ import (
 
 // ResolutionCache a cache for resolving urls
 type ResolutionCache interface {
-	Get(string) (any, bool)
-	Set(string, any)
+	Get(key string) (any, bool)
+	Set(key string, value any)
 }
 
 type simpleCache struct {
