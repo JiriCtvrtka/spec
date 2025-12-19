@@ -1,8 +1,5 @@
 name: go test
 
-permissions:
-  pull-requests: read
-  contents: read
 
 on:
   push:
