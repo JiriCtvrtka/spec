@@ -17,4 +17,4 @@ require (
 	github.com/go-openapi/swag/yamlutils v0.25.4 // indirect
 )
 
-go 1.24.0
+go 1.25.5
