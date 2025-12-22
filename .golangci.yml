@@ -8,16 +8,13 @@ linters:
     - exhaustruct
     - nlreturn
     - nonamedreturns
-    - noinlineerr
     - paralleltest
-    - recvcheck
     - testpackage
     - tparallel
     - varnamelen
     - whitespace
     - wrapcheck
     - wsl
-    - wsl_v5
   settings:
     dupl:
       threshold: 200
