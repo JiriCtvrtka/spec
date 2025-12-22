@@ -43,7 +43,7 @@ func normalizeURI(refPath, base string) string {
 	}
 
 	r := MustCreateRef(refURL.String())
-	if r.IsCanonical() { //nolint:typecheck
+	if r.IsCanonical() {
 		return refURL.String()
 	}
 
@@ -74,9 +74,9 @@ func normalizeURI(refPath, base string) string {
 // in that case, the rebasing is performed // against the id only if this is an anchor for the initial root document.
 // All other intermediate "id"'s found along the way are ignored for the purpose of rebasing.
 func denormalizeRef(ref *Ref, originalRelativeBase, id string) Ref {
-	debugLog("denormalizeRef called:\n$ref: %q\noriginal: %s\nroot ID:%s", ref.String(), originalRelativeBase, id) //nolint:typecheck
+	debugLog("denormalizeRef called:\n$ref: %q\noriginal: %s\nroot ID:%s", ref.String(), originalRelativeBase, id)
 
-	if ref.String() == "" || ref.IsRoot() || ref.HasFragmentOnly { //nolint:typecheck
+	if ref.String() == "" || ref.IsRoot() || ref.HasFragmentOnly {
 		// short circuit: $ref to current doc
 		return *ref
 	}
@@ -101,7 +101,7 @@ func denormalizeRef(ref *Ref, originalRelativeBase, id string) Ref {
 func rebase(ref *Ref, v *url.URL, notEqual bool) (Ref, bool) {
 	var newBase url.URL
 
-	u := ref.GetURL() //nolint:typecheck
+	u := ref.GetURL()
 
 	if u.Scheme != v.Scheme || u.Host != v.Host {
 		return *ref, false
@@ -140,7 +140,7 @@ func rebase(ref *Ref, v *url.URL, notEqual bool) (Ref, bool) {
 
 // normalizeRef canonicalize a Ref, using a canonical relativeBase as its absolute anchor
 func normalizeRef(ref *Ref, relativeBase string) *Ref {
-	r := MustCreateRef(normalizeURI(ref.String(), relativeBase)) //nolint:typecheck
+	r := MustCreateRef(normalizeURI(ref.String(), relativeBase))
 	return &r
 }
 

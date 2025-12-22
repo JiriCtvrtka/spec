@@ -15,6 +15,7 @@ linters:
     - whitespace
     - wrapcheck
     - wsl
+    - typecheck
   settings:
     dupl:
       threshold: 200
