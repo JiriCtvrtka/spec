@@ -11,7 +11,7 @@ import (
 	"github.com/go-openapi/testify/v2/assert"
 )
 
-var logMutex = &sync.Mutex{}
+var logMutex = &sync.Mutex{} //nolint:gochecknoglobals
 
 func TestDebug(t *testing.T) {
 	// usetesting linter disabled until https://github.com/golang/go/issues/71544 is fixed for windows
@@ -24,7 +24,6 @@ func TestDebug(t *testing.T) {
 		_ = os.Remove(tmpName)
 	}()
 
-	// trigger for CI
 	// mutex for -race
 	logMutex.Lock()
 	Debug = true
