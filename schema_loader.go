@@ -82,18 +82,18 @@ func (r *schemaLoader) Resolve(ref *Ref, target any, basePath string) error {
 }
 
 func (r *schemaLoader) transitiveResolver(basePath string, ref Ref) *schemaLoader {
-	if ref.IsRoot() || ref.HasFragmentOnly {
+	if ref.IsRoot() || ref.HasFragmentOnly { //nolint:typecheck
 		return r
 	}
 
 	baseRef := MustCreateRef(basePath)
 	currentRef := normalizeRef(&ref, basePath)
-	if strings.HasPrefix(currentRef.String(), baseRef.String()) {
+	if strings.HasPrefix(currentRef.String(), baseRef.String()) { //nolint:typecheck
 		return r
 	}
 
 	// set a new root against which to resolve
-	rootURL := currentRef.GetURL()
+	rootURL := currentRef.GetURL() //nolint:typecheck
 	rootURL.Fragment = ""
 	root, _ := r.cache.Get(rootURL.String())
 
@@ -121,7 +121,7 @@ func (r *schemaLoader) resolveRef(ref *Ref, target any, basePath string) error {
 		return ErrResolveRefNeedsAPointer
 	}
 
-	if ref.GetURL() == nil {
+	if ref.GetURL() == nil { //nolint:typecheck
 		return nil
 	}
 
@@ -134,25 +134,25 @@ func (r *schemaLoader) resolveRef(ref *Ref, target any, basePath string) error {
 	// Resolve against the root if it isn't nil, and if ref is pointing at the root, or has a fragment only which means
 	// it is pointing somewhere in the root.
 	root := r.root
-	if (ref.IsRoot() || ref.HasFragmentOnly) && root == nil && basePath != "" {
+	if (ref.IsRoot() || ref.HasFragmentOnly) && root == nil && basePath != "" { //nolint:typecheck
 		if baseRef, erb := NewRef(basePath); erb == nil {
-			root, _, _ = r.load(baseRef.GetURL())
+			root, _, _, _ = r.load(baseRef.GetURL()) //nolint:typecheck
 		}
 	}
 
-	if (ref.IsRoot() || ref.HasFragmentOnly) && root != nil {
+	if (ref.IsRoot() || ref.HasFragmentOnly) && root != nil { //nolint:typecheck
 		data = root
 	} else {
 		baseRef := normalizeRef(ref, basePath)
-		data, _, err = r.load(baseRef.GetURL())
+		data, _, _, err = r.load(baseRef.GetURL()) //nolint:typecheck
 		if err != nil {
 			return err
 		}
 	}
 
 	res = data
-	if ref.String() != "" {
-		res, _, err = ref.GetPointer().Get(data)
+	if ref.String() != "" { //nolint:typecheck
+		res, _, err = ref.GetPointer().Get(data) //nolint:typecheck
 		if err != nil {
 			return err
 		}
@@ -160,7 +160,7 @@ func (r *schemaLoader) resolveRef(ref *Ref, target any, basePath string) error {
 	return jsonutils.FromDynamicJSON(res, target)
 }
 
-func (r *schemaLoader) load(refURL *url.URL) (any, bool, error) { //nolint:unparam
+func (r *schemaLoader) load(refURL *url.URL) (any, url.URL, bool, error) {
 	debugLog("loading schema from url: %s", refURL)
 	toFetch := *refURL
 	toFetch.Fragment = ""
@@ -172,28 +172,28 @@ func (r *schemaLoader) load(refURL *url.URL) (any, bool, error) { //nolint:unpar
 
 	data, fromCache := r.cache.Get(normalized)
 	if fromCache {
-		return data, fromCache, nil
+		return data, toFetch, fromCache, nil
 	}
 
 	b, err := r.context.loadDoc(normalized)
 	if err != nil {
-		return nil, false, err
+		return nil, url.URL{}, false, err
 	}
 
 	var doc any
 	if err := json.Unmarshal(b, &doc); err != nil {
-		return nil, false, err
+		return nil, url.URL{}, false, err
 	}
 	r.cache.Set(normalized, doc)
 
-	return doc, fromCache, nil
+	return doc, toFetch, fromCache, nil
 }
 
 // isCircular detects cycles in sequences of $ref.
 //
 // It relies on a private context (which needs not be locked).
 func (r *schemaLoader) isCircular(ref *Ref, basePath string, parentRefs ...string) (foundCycle bool) {
-	normalizedRef := normalizeURI(ref.String(), basePath)
+	normalizedRef := normalizeURI(ref.String(), basePath) //nolint:typecheck
 	if _, ok := r.context.circulars[normalizedRef]; ok {
 		// circular $ref has been already detected in another explored cycle
 		foundCycle = true
@@ -221,7 +221,7 @@ func (r *schemaLoader) deref(input any, parentRefs []string, basePath string) er
 		return fmt.Errorf("unsupported type: %T: %w", input, ErrDerefUnsupportedType)
 	}
 
-	curRef := ref.String()
+	curRef := ref.String() //nolint:typecheck
 	if curRef == "" {
 		return nil
 	}
@@ -237,12 +237,12 @@ func (r *schemaLoader) deref(input any, parentRefs []string, basePath string) er
 		return err
 	}
 
-	if ref.String() == "" || ref.String() == curRef {
+	if ref.String() == "" || ref.String() == curRef { //nolint:typecheck
 		// done with rereferencing
 		return nil
 	}
 
-	parentRefs = append(parentRefs, normalizedRef.String())
+	parentRefs = append(parentRefs, normalizedRef.String()) //nolint:typecheck
 	return r.deref(input, parentRefs, normalizedBasePath)
 }
 
@@ -293,8 +293,8 @@ func defaultSchemaLoader(
 	root any,
 	expandOptions *ExpandOptions,
 	cache ResolutionCache,
-	context *resolverContext,
-) *schemaLoader {
+	context *resolverContext) *schemaLoader {
+
 	if expandOptions == nil {
 		expandOptions = &ExpandOptions{}
 	}

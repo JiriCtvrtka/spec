@@ -125,7 +125,7 @@ func TestExpand_ResponseSchema(t *testing.T) {
 	sch := spec.Paths.Paths["/item"].Get.Responses.StatusCodeResponses[200].Schema
 	require.NotNil(t, sch)
 
-	assert.Empty(t, sch.Ref.String())
+	assert.Empty(t, sch.Ref.String()) //nolint:typecheck
 	assert.Contains(t, sch.Type, "object")
 	assert.Len(t, sch.Properties, 2)
 }
@@ -449,7 +449,7 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 	// verify unmarshaled structure
 	schema := spec.Definitions["car"]
 	oldBrand := schema.Properties["brand"]
-	require.NotEmpty(t, oldBrand.Items.Schema.Ref.String()) // this is a $ref
+	require.NotEmpty(t, oldBrand.Items.Schema.Ref.String()) // this is a $ref //nolint:typecheck
 	require.NotEqual(t, spec.Definitions["brand"], oldBrand)
 
 	_, err = expandSchema(schema, []string{"#/definitions/car"}, resolver, basePath)
@@ -457,19 +457,19 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 
 	// verify expanded schema for Car, in the document passed
 	newBrand := schema.Properties["brand"]
-	assert.Empty(t, newBrand.Items.Schema.Ref.String())
+	assert.Empty(t, newBrand.Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, spec.Definitions["brand"], *newBrand.Items.Schema)
 
 	// verify expanded schema for Truck, in the returned schema
 	schema = spec.Definitions["truck"]
-	require.NotEmpty(t, schema.Items.Schema.Ref.String())
+	require.NotEmpty(t, schema.Items.Schema.Ref.String()) //nolint:typecheck
 	s, err := expandSchema(schema, []string{"#/definitions/truck"}, resolver, basePath)
 	require.NoError(t, err)
 	require.NotNil(t, s)
 
 	schema = *s
-	assert.Empty(t, schema.Items.Schema.Ref.String()) // no more a $ref
-	assert.False(t, schema.Items.Schema.Ref.IsRoot()) // no more a $ref
+	assert.Empty(t, schema.Items.Schema.Ref.String()) // no more a $ref //nolint:typecheck
+	assert.False(t, schema.Items.Schema.Ref.IsRoot()) // no more a $ref //nolint:typecheck
 	assert.Equal(t, spec.Definitions["car"], *schema.Items.Schema)
 
 	sch := new(Schema)
@@ -483,7 +483,7 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 	require.NotNil(t, s)
 
 	schema = *s
-	assert.Empty(t, schema.Items.Schema.Items.Schema.Ref.String())
+	assert.Empty(t, schema.Items.Schema.Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *schema.Items.Schema.Items.Schema, spec.Definitions["brand"])
 
 	// verify expanded schema for Batch2, in the returned schema
@@ -493,8 +493,8 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 	require.NotNil(t, s)
 
 	schema = *s
-	assert.Empty(t, schema.Items.Schemas[0].Items.Schema.Ref.String())
-	assert.Empty(t, schema.Items.Schemas[1].Items.Schema.Ref.String())
+	assert.Empty(t, schema.Items.Schemas[0].Items.Schema.Ref.String()) //nolint:typecheck
+	assert.Empty(t, schema.Items.Schemas[1].Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *schema.Items.Schemas[0].Items.Schema, spec.Definitions["brand"])
 	assert.Equal(t, *schema.Items.Schemas[1].Items.Schema, spec.Definitions["tag"])
 
@@ -505,8 +505,8 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 	require.NotNil(t, s)
 
 	schema = *s
-	assert.Empty(t, schema.AllOf[0].Items.Schema.Ref.String())
-	assert.Empty(t, schema.AllOf[1].Items.Schema.Ref.String())
+	assert.Empty(t, schema.AllOf[0].Items.Schema.Ref.String()) //nolint:typecheck
+	assert.Empty(t, schema.AllOf[1].Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *schema.AllOf[0].Items.Schema, spec.Definitions["brand"])
 	assert.Equal(t, *schema.AllOf[1].Items.Schema, spec.Definitions["tag"])
 
@@ -517,8 +517,8 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 	require.NotNil(t, s)
 
 	schema = *s
-	assert.Empty(t, schema.AnyOf[0].Items.Schema.Ref.String())
-	assert.Empty(t, schema.AnyOf[1].Items.Schema.Ref.String())
+	assert.Empty(t, schema.AnyOf[0].Items.Schema.Ref.String()) //nolint:typecheck
+	assert.Empty(t, schema.AnyOf[1].Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *schema.AnyOf[0].Items.Schema, spec.Definitions["brand"])
 	assert.Equal(t, *schema.AnyOf[1].Items.Schema, spec.Definitions["tag"])
 
@@ -529,8 +529,8 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 	require.NotNil(t, s)
 
 	schema = *s
-	assert.Empty(t, schema.OneOf[0].Items.Schema.Ref.String())
-	assert.Empty(t, schema.OneOf[1].Items.Schema.Ref.String())
+	assert.Empty(t, schema.OneOf[0].Items.Schema.Ref.String()) //nolint:typecheck
+	assert.Empty(t, schema.OneOf[1].Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *schema.OneOf[0].Items.Schema, spec.Definitions["brand"])
 	assert.Equal(t, *schema.OneOf[1].Items.Schema, spec.Definitions["tag"])
 
@@ -541,7 +541,7 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 	require.NotNil(t, s)
 
 	schema = *s
-	assert.Empty(t, schema.Not.Items.Schema.Ref.String())
+	assert.Empty(t, schema.Not.Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *schema.Not.Items.Schema, spec.Definitions["tag"])
 
 	// verify expanded schema for WithAdditional, in the returned schema [expand additionalProperties]
@@ -551,7 +551,7 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 	require.NotNil(t, s)
 
 	schema = *s
-	assert.Empty(t, schema.AdditionalProperties.Schema.Items.Schema.Ref.String())
+	assert.Empty(t, schema.AdditionalProperties.Schema.Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *schema.AdditionalProperties.Schema.Items.Schema, spec.Definitions["tag"])
 
 	// verify expanded schema for WithAdditionalItems, in the returned schema [expand additionalItems]
@@ -561,7 +561,7 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 	require.NotNil(t, s)
 
 	schema = *s
-	assert.Empty(t, schema.AdditionalItems.Schema.Items.Schema.Ref.String())
+	assert.Empty(t, schema.AdditionalItems.Schema.Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *schema.AdditionalItems.Schema.Items.Schema, spec.Definitions["tag"])
 
 	// verify expanded schema for WithPattern, in the returned schema [expand PatternProperties]
@@ -572,7 +572,7 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 
 	schema = *s
 	prop := schema.PatternProperties["^x-ab"]
-	assert.Empty(t, prop.Items.Schema.Ref.String())
+	assert.Empty(t, prop.Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *prop.Items.Schema, spec.Definitions["tag"])
 
 	// verify expanded schema for Deps, in the returned schema [expand dependencies]
@@ -583,7 +583,7 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 
 	schema = *s
 	prop2 := schema.Dependencies["something"]
-	assert.Empty(t, prop2.Schema.Items.Schema.Ref.String())
+	assert.Empty(t, prop2.Schema.Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *prop2.Schema.Items.Schema, spec.Definitions["tag"])
 
 	// verify expanded schema for Defined, in the returned schema [expand nested definitions]
@@ -594,7 +594,7 @@ func TestExpand_InternalSchemas2(t *testing.T) {
 
 	schema = *s
 	prop = schema.Definitions["something"]
-	assert.Empty(t, prop.Items.Schema.Ref.String())
+	assert.Empty(t, prop.Items.Schema.Ref.String()) //nolint:typecheck
 	assert.Equal(t, *prop.Items.Schema, spec.Definitions["tag"])
 }
 

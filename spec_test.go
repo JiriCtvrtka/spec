@@ -74,7 +74,7 @@ func TestSpec_Issue1429(t *testing.T) {
 	assertPaths1429SkipSchema(t, sp)
 
 	for _, def := range sp.Definitions {
-		assert.Contains(t, def.Ref.String(), "responses.yaml#/definitions/")
+		assert.Contains(t, def.Ref.String(), "responses.yaml#/definitions/") //nolint:typecheck
 	}
 }
 
@@ -84,7 +84,7 @@ func assertPaths1429(t testing.TB, sp *spec.Swagger) {
 			require.NotNilf(t, param.Schema, "expected param schema not to be nil")
 			// all param fixtures are body param with schema
 			// all $ref expanded
-			assert.Empty(t, param.Schema.Ref.String())
+			   assert.Empty(t, param.Schema.Ref.String()) //nolint:typecheck
 		}
 
 		for code, response := range pi.Get.Responses.StatusCodeResponses {
@@ -94,7 +94,7 @@ func assertPaths1429(t testing.TB, sp *spec.Swagger) {
 				continue
 			}
 			require.NotNilf(t, response.Schema, "expected response schema not to be nil")
-			assert.Empty(t, response.Schema.Ref.String())
+			   assert.Empty(t, response.Schema.Ref.String()) //nolint:typecheck
 		}
 	}
 }
@@ -108,18 +108,18 @@ func assertPaths1429SkipSchema(t testing.TB, sp *spec.Swagger) {
 			switch param.Name {
 			case "plainRequest":
 				// this one is expanded
-				assert.Empty(t, param.Schema.Ref.String())
+				   assert.Empty(t, param.Schema.Ref.String()) //nolint:typecheck
 				continue
 			case "nestedBody":
 				// this one is local
-				assert.Truef(t, strings.HasPrefix(param.Schema.Ref.String(), "#/definitions/"),
-					"expected rooted definitions $ref, got: %s", param.Schema.Ref.String())
+				   assert.Truef(t, strings.HasPrefix(param.Schema.Ref.String(), "#/definitions/"),
+					   "expected rooted definitions $ref, got: %s", param.Schema.Ref.String()) //nolint:typecheck
 				continue
 			case "remoteRequest":
-				assert.Contains(t, param.Schema.Ref.String(), "remote/remote.yaml#/")
+				   assert.Contains(t, param.Schema.Ref.String(), "remote/remote.yaml#/") //nolint:typecheck
 				continue
 			}
-			assert.Contains(t, param.Schema.Ref.String(), "responses.yaml#/")
+			   assert.Contains(t, param.Schema.Ref.String(), "responses.yaml#/") //nolint:typecheck
 
 		}
 
@@ -130,13 +130,13 @@ func assertPaths1429SkipSchema(t testing.TB, sp *spec.Swagger) {
 				assert.Nilf(t, response.Schema, "expected response schema to be nil")
 				continue
 			case 204:
-				assert.Contains(t, response.Schema.Ref.String(), "remote/remote.yaml#/")
+				   assert.Contains(t, response.Schema.Ref.String(), "remote/remote.yaml#/") //nolint:typecheck
 				continue
 			case 404:
-				assert.Empty(t, response.Schema.Ref.String())
+				   assert.Empty(t, response.Schema.Ref.String()) //nolint:typecheck
 				continue
 			}
-			assert.Containsf(t, response.Schema.Ref.String(), "responses.yaml#/", "expected remote ref at resp. %d", code)
+			   assert.Containsf(t, response.Schema.Ref.String(), "responses.yaml#/", "expected remote ref at resp. %d", code) //nolint:typecheck
 		}
 	}
 }
