@@ -21,7 +21,7 @@ jobs:
           check-latest: true
           cache: true
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v5.3.0
+        uses: golangci/golangci-lint-action@v6
         with:
           version: v1.59.1
           only-new-issues: true
@@ -37,22 +37,19 @@ jobs:
         go_version: ['oldstable', 'stable' ]
 
     steps:
-    - name: Run unit tests
-      uses: actions/setup-go@v5
-      with:
-        go-version: '${{ matrix.go_version }}'
-        check-latest: true
-        cache: true
-
-    - uses: actions/checkout@v4
-
-    - run: go test -v -race -coverprofile="coverage-${{ matrix.os }}.${{ matrix.go_version }}.out" -covermode=atomic -coverpkg=$(go list)/... ./...
-
-    - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v4
-      with:
-        files: './coverage-${{ matrix.os }}.${{ matrix.go_version }}.out'
-        flags: '${{ matrix.go_version }}'
-        os: '${{ matrix.os }}'
-        fail_ci_if_error: false
-        verbose: true
+      - name: Run unit tests
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '${{ matrix.go_version }}'
+          check-latest: true
+          cache: true
+      - uses: actions/checkout@v4
+      - run: go test -v -race -coverprofile="coverage-${{ matrix.os }}.${{ matrix.go_version }}.out" -covermode=atomic -coverpkg=$(go list)/... ./...
+      - name: Upload coverage to codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: './coverage-${{ matrix.os }}.${{ matrix.go_version }}.out'
+          flags: '${{ matrix.go_version }}'
+          os: '${{ matrix.os }}'
+          fail_ci_if_error: false
+          verbose: true
